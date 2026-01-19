@@ -21,6 +21,7 @@
 // export default Header;
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -32,7 +33,10 @@ const Header = () => {
     <nav className="bg-stone-800 px-15 py-3">
       <div className="flex justify-between items-center max-w-7xl mx-auto">
         {/* Logo */}
-        <img src="/logo.png" alt="foodian" className="w-[180px]" />
+        <Link href="/">
+        {/* <img src="/logo.png" alt="foodian" className="w-[180px]" /> */}
+        <Image width={120} height={30} src="/logo.png" alt="foodian" className="w-[180px]"></Image>
+        </Link>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6">
