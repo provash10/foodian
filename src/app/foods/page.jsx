@@ -2,15 +2,21 @@
 import FoodCard from '@/Components/cards/FoodCard';
 import React from 'react';
 
-// Force dynamic rendering to prevent build-time fetch errors
+import { connect } from '@/app/lib/dbConnect';
+
+// Force dynamic rendering to ensure fresh data in production
 export const dynamic = 'force-dynamic';
 
 const getfood = async () => {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const res = await fetch(`${baseUrl}/api/food`, {
-        cache: "no-store"
-    });
-    return await res.json();
+    try {
+        const foods = await connect("foods").find().toArray();
+        // Map the result to ensure _id is a string if needed, or serialize it.
+        // Actually, FoodCard just needs decimals/strings.
+        return JSON.parse(JSON.stringify(foods));
+    } catch (error) {
+        console.error("Error fetching foods from DB:", error);
+        return [];
+    }
 };
 
 
