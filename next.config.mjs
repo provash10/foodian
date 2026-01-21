@@ -2,12 +2,6 @@
 const nextConfig = {
   images: {
     remotePatterns: [
-      // {
-      //   protocol: "https",
-      //   hostname: "**",
-      // },
-      
-
       {
         protocol: "https",
         hostname: "**",
@@ -23,14 +17,3 @@ const nextConfig = {
 };
 
 export default nextConfig;
-
-// /** @type {import('next').NextConfig} */
-// const nextConfig = {
-//   images: {
-//     domains: ["i.ibb.co"],
-//   },
-// };
-
-// module.exports = nextConfig;
-
-

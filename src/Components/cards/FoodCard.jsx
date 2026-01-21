@@ -9,9 +9,10 @@ const FoodCard = ({ food }) => {
       <Image
         width={300}
         height={200}
-        src={food.image || '/placeholder.png'}
-        alt={food.name}
+        src={food?.image || '/placeholder.png'}
+        alt={food?.name || 'Food item'}
         className="w-full h-48 object-cover"
+        unoptimized
       />
 
       {/* Food Details */}
@@ -29,10 +30,10 @@ const FoodCard = ({ food }) => {
         >
           View Details
         </Link> */}
-        <Link href={`/foods/${food._id.toString()}`} 
-      className="mt-4 block text-center bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
-  View Details
-</Link>
+        <Link href={`/foods/${food._id.toString()}`}
+          className="mt-4 block text-center bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+          View Details
+        </Link>
 
       </div>
     </div>

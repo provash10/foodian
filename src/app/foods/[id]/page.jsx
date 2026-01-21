@@ -1,68 +1,3 @@
-// import React from "react";
-// import Image from "next/image";
-// import { notFound } from "next/navigation";
-
-// export const metadata = {
-//   title: "Food Details",
-// };
-
-// const getFoodById = async (id) => {
-//   try {
-//     const res = await fetch(`http://localhost:3000/api/food/${id}`, {
-//       cache: "no-store",
-//     });
-//     if (!res.ok) return null;
-//     return res.json();
-//   } catch (err) {
-//     console.error("Fetch food failed:", err);
-//     return null;
-//   }
-// };
-
-// const FoodDetails = async ({ params }) => {
-//   const { id } = await params;
-//   const food = await getFoodById(id);
-
-//   if (!food) {
-//     notFound();
-//   }
-
-//   return (
-
-//  <div className="max-w-6xl mx-auto p-6">
-//   <div className="flex flex-col md:flex-row justify-between items-start gap-8">
-//     {/* Image left side */}
-//     <div className="w-full md:w-1/2 flex justify-center md:justify-start">
-//       <Image
-//         src="/placeholder.png"
-//         width={300}
-//         height={200}
-//         alt="Chicken Tikka Masala"
-//         className="w-full max-w-[300px] h-auto object-cover rounded-lg"
-//         priority
-//       />
-//     </div>
-
-//     {/* Info right side */}
-//     <div className="w-full md:w-1/2 flex flex-col justify-start">
-//       <h1 className="text-3xl font-bold mb-4">Chicken Tikka Masala</h1>
-//       <p className="text-gray-600 mb-4">
-//         Classic Italian pasta with creamy sauce, pancetta, and parmesan.
-//       </p>
-//       <p className="text-2xl font-semibold mb-6">$12.99</p>
-//       <button className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition w-fit">
-//         Add to Cart
-//       </button>
-//     </div>
-//   </div>
-// </div>
-
-
-//   );
-// };
-
-// export default FoodDetails;
-
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -70,9 +5,13 @@ export const metadata = {
   title: "Food Details",
 };
 
+// Force dynamic rendering to prevent build-time fetch errors
+export const dynamic = 'force-dynamic';
+
 const getFoodById = async (id) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/food/${id}`, {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const res = await fetch(`${baseUrl}/api/food/${id}`, {
       cache: "no-store",
     });
     if (!res.ok) return null;
@@ -101,8 +40,8 @@ const FoodDetails = async ({ params }) => {
     typeof food.name === "string" && food.name.trim() !== ""
       ? food.name
       : "Food image";
-          console.log("single food", food);
-      // const {_id, name, description,price, image} = food;
+  console.log("single food", food);
+  // const {_id, name, description,price, image} = food;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white py-12 px-4">
@@ -110,25 +49,15 @@ const FoodDetails = async ({ params }) => {
 
         {/* IMAGE */}
         <div className="relative h-[320px] md:h-full">
-          {/* <Image
-  src={imageSrc}
-  width={500}
-  height={400}
-  alt={altText}
-  className="object-cover"
-  priority
-/> */}
-{/* <Image
-                        src={imageSrc || "https://i.ibb.co.com/Gfshn31s/1-Chicken-Tikka-Masala.jpg" }
-                        alt="Category Banner"
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 1024px) 100vw, 66vw"
-                        loading="lazy"
-                        // priority={item.id <= 2}
-                      /> */}
-
-          <img src={imageSrc || "https://i.ibb.co.com/Gfshn31s/1-Chicken-Tikka-Masala.jpg"} alt="" />
+          <Image
+            src={imageSrc}
+            alt={altText}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            priority
+            unoptimized
+          />
         </div>
 
         {/* CONTENT */}

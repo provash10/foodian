@@ -2,16 +2,19 @@
 import FoodCard from '@/Components/cards/FoodCard';
 import React from 'react';
 
-const getfood = async()=>{
-    const res= await fetch("http://localhost:3000/api/food",{
-        cache: "force-cache",
-        next:{revalidate: 60}
+// Force dynamic rendering to prevent build-time fetch errors
+export const dynamic = 'force-dynamic';
+
+const getfood = async () => {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const res = await fetch(`${baseUrl}/api/food`, {
+        cache: "no-store"
     });
     return await res.json();
 };
 
 
-const Foods = async() => {
+const Foods = async () => {
     const foods = await getfood();
     console.log(foods);
 
@@ -21,7 +24,7 @@ const Foods = async() => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {
-                    foods.map((food)=> <FoodCard key={food._id} food={food}></FoodCard>)
+                    foods.map((food) => <FoodCard key={food._id} food={food}></FoodCard>)
                 }
             </div>
         </div>
