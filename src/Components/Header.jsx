@@ -1,24 +1,3 @@
-// import Link from 'next/link';
-// import React from 'react';
-
-// const Header = () => {
-//     return (
-//         <nav className="px-5 py-2 flex justify-between items-center bg-stone-800">
-//           <img src="/logo.png" alt="foodian" className="w-[200px]"/>
-//           {/* <Image>
-
-//           </Image> */}
-//           <div className="space-x-5">
-//           <Link href="/" className="btn">Home</Link>
-//           <Link href="/foods" className="btn">All Foods</Link>
-//           <Link href="/reviews" className="btn">Reviews</Link>
-//           <Link href="/login" className="btn">Login</Link>
-//           </div>
-//         </nav>
-//     );
-// };
-
-// export default Header;
 "use client";
 
 import Image from "next/image";
@@ -35,14 +14,22 @@ const Header = () => {
         {/* Logo */}
         <Link href="/">
         {/* <img src="/logo.png" alt="foodian" className="w-[180px]" /> */}
-        <Image width={120} height={30} src="/logo.png" alt="foodian" className="w-[180px]"></Image>
+        {/* <Image width={120} height={30} src="/logo.png" alt="foodian" className="w-[180px]"></Image> */}
+        <Image
+  src="/logo.png"
+  alt="Logo"
+  width={150}
+  height={50}
+  priority
+/>
+
         </Link>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6">
           <Link href="/" className="btn">Home</Link>
           <Link href="/foods" className="btn">All Foods</Link>
-          <Link href="/reviews" className="btn">Reviews</Link>
+          <Link href="/add" className="btn">Add Food</Link>
           <Link href="/login" className="btn">Login</Link>
         </div>
 
