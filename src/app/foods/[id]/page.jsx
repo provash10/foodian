@@ -257,7 +257,7 @@ const FoodDetails = async ({ params }) => {
               <FaMedal />
             </div>
             <div>
-              <h5 className="font-black text-gray-900 text-xl mb-2">Chef's Special</h5>
+              <h5 className="font-black text-gray-900 text-xl mb-2">Chef&apos;s Special</h5>
               <p className="text-gray-500 font-medium leading-relaxed">
                 Consistently rated 4.9 stars by our food critics and gourmet fans.
               </p>
