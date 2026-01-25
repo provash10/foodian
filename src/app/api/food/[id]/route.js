@@ -1,124 +1,70 @@
-// import { food } from "../../route";  no need
-
 import { connect } from "@/app/lib/dbConnect";
 import { ObjectId } from "mongodb";
 
-const foodCollection = connect("foods");
+export const dynamic = 'force-dynamic';
 
-export async function GET(request, {params}) {
-   const {id} = await params;
+export async function GET(request, { params }) {
+    try {
+        const { id } = await params;
+        if (!id || id.length !== 24) {
+            return Response.json({ status: 400, message: "send correct_id" }, { status: 400 });
+        }
 
-   if(id.length!=24){
-    return Response.json({
-        status:400,
-        message:"send correct_id"
-    })
-   }
+        const foodCollection = connect("foods");
+        const query = { _id: new ObjectId(id) };
+        const result = await foodCollection.findOne(query);
 
-   const query={_id:new ObjectId(id)}
-   const result=await foodCollection.findOne(query);
-
-//    const singleFood = food.find(fd=> fd.id==id) || {}; no need
-
-//    return Response.json({id})
-//    return Response.json({singleFood})
-   return Response.json(result);
-}
-
-export async function DELETE(request, {params}) {
-   const {id} = await params;
-
-   if(id.length!=24){
-    return Response.json({
-        status:400,
-        message:"send correct_id"
-    })
-   }
-
-   const query={_id:new ObjectId(id)}
-   const result=await foodCollection.deleteOne(query);
-
-   return Response.json(result);
-}
-
-export async function PATCH(request, {params}) {
-   const {id} = await params;
-   const {message}= await request.json();
-
-   if(id.length!=24){
-    return Response.json({
-        status:400,
-        message:"send correct_id"
-    })
-   }
-
-    if(!message || typeof message !=="string"){
-        return Response.json({
-            status:400,
-            message: "Please Send a message"
-        })
+        return Response.json(result);
+    } catch (err) {
+        console.error("API Error (GET ID):", err);
+        return Response.json({ error: err.message }, { status: 500 });
     }
-
-   const query={_id:new ObjectId(id)}
-   const newData={
-    $set:{
-        message,
-        updatedAt: new Date()
-    }
-   }
-
-   const result=await foodCollection.updateOne(query, newData);
-
-   return Response.json(result);
 }
 
+export async function DELETE(request, { params }) {
+    try {
+        const { id } = await params;
+        if (!id || id.length !== 24) {
+            return Response.json({ status: 400, message: "send correct_id" }, { status: 400 });
+        }
 
-// import { connect } from "@/app/lib/dbConnect";
-// import { ObjectId } from "mongodb";
+        const foodCollection = connect("foods");
+        const query = { _id: new ObjectId(id) };
+        const result = await foodCollection.deleteOne(query);
 
-// const foodCollection = connect("foods"); 
+        return Response.json(result);
+    } catch (err) {
+        console.error("API Error (DELETE):", err);
+        return Response.json({ error: err.message }, { status: 500 });
+    }
+}
 
-// export async function GET(request, { params }) {
-//   const { id } = params;
+export async function PATCH(request, { params }) {
+    try {
+        const { id } = await params;
+        const { message } = await request.json();
 
-//   if (id.length !== 24) {
-//     return Response.json({ status: 400, message: "send correct_id" });
-//   }
+        if (!id || id.length !== 24) {
+            return Response.json({ status: 400, message: "send correct_id" }, { status: 400 });
+        }
 
-//   const query = { _id: new ObjectId(id) };
-//   const result = await foodCollection.findOne(query);
+        if (!message || typeof message !== "string") {
+            return Response.json({ status: 400, message: "Please Send a message" }, { status: 400 });
+        }
 
-//   return Response.json(result); 
+        const foodCollection = connect("foods");
+        const query = { _id: new ObjectId(id) };
+        const newData = {
+            $set: {
+                message,
+                updatedAt: new Date()
+            }
+        };
 
-// export async function DELETE(request, { params }) {
-//   const { id } = params;
-
-//   if (id.length !== 24) {
-//     return Response.json({ status: 400, message: "send correct_id" });
-//   }
-
-//   const query = { _id: new ObjectId(id) };
-//   const result = await foodCollection.deleteOne(query);
-
-//   return Response.json(result);
-// }
-
-// export async function PATCH(request, { params }) {
-//   const { id } = params;
-//   const { message } = await request.json();
-
-//   if (id.length !== 24) {
-//     return Response.json({ status: 400, message: "send correct_id" });
-//   }
-
-//   if (!message || typeof message !== "string") {
-//     return Response.json({ status: 400, message: "Please Send a message" });
-//   }
-
-//   const query = { _id: new ObjectId(id) };
-//   const newData = { $set: { message, updatedAt: new Date() } };
-
-//   const result = await foodCollection.updateOne(query, newData);
-
-//   return Response.json(result);
-// }
+        const result = await foodCollection.updateOne(query, newData);
+        return Response.json(result);
+    } catch (err) {
+        console.error("API Error (PATCH):", err);
+        return Response.json({ error: err.message }, { status: 500 });
+    }
+}

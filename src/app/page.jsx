@@ -5,18 +5,17 @@ import OrdersNow from "@/Components/HomePages/OrdersNow";
 import PopularRecipes from "@/Components/HomePages/PopularRecipes";
 import Stats from "@/Components/HomePages/Stats";
 import { Testimonials } from "@/Components/HomePages/Testimonials";
-import Image from "next/image";
 
-export default function Home() {
+export default async function Home() {
   return (
-    <div>
-      <Banner></Banner>
-      <Features></Features>
-      <PopularRecipes></PopularRecipes>
-      <Testimonials></Testimonials>
-      <Stats></Stats>
-      <NewsLetter></NewsLetter>
-      <OrdersNow></OrdersNow>
+    <div className="space-y-0">
+      <Banner />
+      <Features />
+      <PopularRecipes />
+      <Stats />
+      <Testimonials />
+      <NewsLetter />
+      <OrdersNow />
     </div>
   );
 }

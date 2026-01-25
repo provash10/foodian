@@ -1,28 +1,30 @@
 import { connect } from "@/app/lib/dbConnect";
 import { revalidatePath } from "next/cache";
 
-const foodCollection = connect("foods");
+export const dynamic = 'force-dynamic';
 
-// GET all foods
+// get all foods
 export async function GET() {
   try {
+    const foodCollection = connect("foods");
     const foods = await foodCollection.find().toArray();
-    return new Response(JSON.stringify(foods), { status: 200 });
+    return Response.json(foods);
   } catch (err) {
-    console.error(err);
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+    console.error("API Error (GET):", err);
+    return Response.json({ error: err.message }, { status: 500 });
   }
 }
 
-// POST new food
+// Post new food
 export async function POST(request) {
   try {
+    const foodCollection = connect("foods");
     const data = await request.json();
     const { name, description, price, image } = data;
 
     // Validate data
     if (!name || !description || !price) {
-      return new Response(JSON.stringify({ error: "Name, description and price required" }), { status: 400 });
+      return Response.json({ error: "Name, description and price required" }, { status: 400 });
     }
 
     const newFood = {
@@ -36,9 +38,9 @@ export async function POST(request) {
     const result = await foodCollection.insertOne(newFood);
     revalidatePath("/food");
 
-    return new Response(JSON.stringify({ success: true, insertedId: result.insertedId }), { status: 201 });
+    return Response.json({ success: true, insertedId: result.insertedId }, { status: 201 });
   } catch (err) {
-    console.error(err);
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+    console.error("API Error (POST):", err);
+    return Response.json({ error: err.message }, { status: 500 });
   }
 }

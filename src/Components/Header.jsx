@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
+import AuthButtons from "./authBtn/AuthButtons";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,24 +14,24 @@ const Header = () => {
       <div className="flex justify-between items-center max-w-7xl mx-auto">
         {/* Logo */}
         <Link href="/">
-        {/* <img src="/logo.png" alt="foodian" className="w-[180px]" /> */}
-        {/* <Image width={120} height={30} src="/logo.png" alt="foodian" className="w-[180px]"></Image> */}
-        <Image
-  src="/logo.png"
-  alt="Logo"
-  width={150}
-  height={50}
-  priority
-/>
+          {/* <img src="/logo.png" alt="foodian" className="w-[180px]" /> */}
+          {/* <Image width={120} height={30} src="/logo.png" alt="foodian" className="w-[180px]"></Image> */}
+          <Image
+            src="/logo.png"
+            alt="Logo"
+            width={150}
+            height={50}
+            priority
+          />
 
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-6">
+        <div className="hidden md:flex items-center space-x-6">
           <Link href="/" className="btn">Home</Link>
           <Link href="/foods" className="btn">All Foods</Link>
           <Link href="/add" className="btn">Add Food</Link>
-          <Link href="/login" className="btn">Login</Link>
+          <AuthButtons />
         </div>
 
         {/* Mobile Menu Button */}
@@ -51,12 +52,12 @@ const Header = () => {
           <Link href="/foods" className="btn" onClick={() => setMenuOpen(false)}>
             All Foods
           </Link>
-          <Link href="/reviews" className="btn" onClick={() => setMenuOpen(false)}>
-            Reviews
+          <Link href="/add" className="btn" onClick={() => setMenuOpen(false)}>
+            Add Food
           </Link>
-          <Link href="/login" className="btn" onClick={() => setMenuOpen(false)}>
-            Login
-          </Link>
+          <div onClick={() => setMenuOpen(false)}>
+            <AuthButtons />
+          </div>
         </div>
       )}
     </nav>
