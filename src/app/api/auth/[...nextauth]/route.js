@@ -24,20 +24,31 @@ export const authOptions = {
         if (!credentials?.email || !credentials?.password) return null;
 
         const { email, password } = credentials;
-        const user = await connect("users").findOne({ email: email });
+        try {
+          // connect() is synchronous now but returns a collection that we can use
+          const collection = connect("users");
+          if (!collection) {
+            console.error("Failed to connect to users collection");
+            return null;
+          }
+          const user = await collection.findOne({ email: email });
 
-        if (!user) return null;
+          if (!user) return null;
 
-        // match password
-        const isPassWordOk = await bcrypt.compare(password, user?.password);
+          // match password
+          const isPassWordOk = await bcrypt.compare(password, user?.password || "");
 
-        if (isPassWordOk) {
-          return {
-            id: user._id.toString(),
-            name: user.name,
-            email: user.email,
-            role: user.role
-          };
+          if (isPassWordOk) {
+            return {
+              id: user._id.toString(),
+              name: user.name,
+              email: user.email,
+              role: user.role
+            };
+          }
+        } catch (error) {
+          console.error("Auth error:", error);
+          return null;
         }
 
         return null;
@@ -50,6 +61,8 @@ export const authOptions = {
       return true
     },
     async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      else if (new URL(url).origin === baseUrl) return url
       return baseUrl
     },
     async session({ session, token }) {
@@ -71,7 +84,10 @@ export const authOptions = {
   session: {
     strategy: "jwt",
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || "default_secret_for_development",
+  pages: {
+    error: '/api/auth/error',
+  },
 }
 
 const handler = NextAuth(authOptions);

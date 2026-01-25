@@ -28,6 +28,7 @@ export const postUser = async (payload) => {
     console.log(payload);
 
     //check user exit
+    //check user exit
     const isExist = await connect("users").findOne({ email: payload.email });
     if (isExist) {
         return { success: false, message: "User already exists" };
@@ -44,6 +45,7 @@ export const postUser = async (payload) => {
     };
     // console.log(newUser);
 
+    // send user to db 
     // send user to db 
     const result = await connect("users").insertOne(newUser);
     if (result.acknowledged) {
