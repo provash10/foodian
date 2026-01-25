@@ -21,7 +21,14 @@ export default withAuth(
 
         // Protect /add route
         if (pathname.startsWith("/add")) {
-          return !!token;
+          if (!token) {
+            // Instead of auto redirecting → return false will redirect to /api/auth/signin automatically
+            // OR you can rewrite to a custom page
+            const url = req.nextUrl.clone();
+            url.pathname = "/auth/signin"; // Custom login page
+            return NextResponse.redirect(url);
+          }
+          return true;
         }
 
         return true;
@@ -31,5 +38,6 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/add", "/api/:path*"],
+  matcher: ["/add", "/api/food"],
 };
+

@@ -10,7 +10,6 @@ const userList = [
 ];
 
 export const authOptions = {
-  trustHost: true,
   providers: [
     CredentialsProvider({
       name: "Email & Password",

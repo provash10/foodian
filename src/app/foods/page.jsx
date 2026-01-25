@@ -6,28 +6,39 @@ export const dynamic = 'force-dynamic';
 
 const getfood = async () => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/food`, {
-            cache: "no-store",
-        });
+        const foodCollection = connect("foods");
+        const foods = await foodCollection.find().toArray();
 
-        if (!res.ok) {
-            throw new Error(`Failed to fetch foods: ${res.status}`);
-        }
-
-        const text = await res.text();
-        try {
-            return JSON.parse(text);
-        } catch (e) {
-            console.error("Received non-JSON response from API:", text.substring(0, 100));
-            return [];
-        }
+        // Serialize _id to string to avoid serialization warnings/errors in Next.js
+        return foods.map(food => ({
+            ...food,
+            _id: food._id.toString()
+        }));
     } catch (error) {
-        console.error("Error fetching foods from API:", error);
+        console.error("Error fetching foods from DB:", error);
         return [];
     }
 };
 
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import Link from "next/link";
+
 const Foods = async () => {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center bg-[#fffcf9] text-center px-4">
+                <h2 className="text-4xl font-black text-gray-900 mb-6">Access Restricted</h2>
+                <p className="text-gray-500 mb-8 text-lg max-w-md mx-auto">Please login to view our exclusive culinary gallery and discover our premium menu.</p>
+                <Link href="/api/auth/signin?callbackUrl=/foods" className="bg-orange-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-orange-700 transition-all shadow-xl hover:-translate-y-1">
+                    Login to Continue
+                </Link>
+            </div>
+        )
+    }
+
     const foods = await getfood();
 
     return (

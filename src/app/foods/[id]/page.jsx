@@ -30,23 +30,20 @@ const getFoodById = async (id) => {
   try {
     if (!id || id.length !== 24) return null;
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/food/${id}`, {
-      cache: "no-store",
-    });
+    const foodCollection = connect("foods");
+    const query = { _id: new ObjectId(id) };
+    const food = await foodCollection.findOne(query);
 
-    if (!res.ok) {
-      return null;
+    if (food) {
+      return {
+        ...food,
+        _id: food._id.toString()
+      };
     }
+    return null;
 
-    const text = await res.text();
-    try {
-      return JSON.parse(text);
-    } catch (e) {
-      console.error("Received non-JSON response for food item:", text.substring(0, 100));
-      return null;
-    }
   } catch (error) {
-    console.error("Error fetching food from API:", error);
+    console.error("Error fetching food from DB:", error);
     return null;
   }
 };
